@@ -1,35 +1,59 @@
 # -*- coding: utf-8 -*-
 # Made by @nesterovoa
-#
-# > FAQ:
-# - Token should be placed in TOKEN_FILE!
-# - If lib requests not installed run: pip.main(['install', 'requests'])
-# - Pip install telegram-bot:
-#   pip install python-telegram-bot --upgrade
-# - Anaconda install telegram-bot:
-#   conda install -c conda-forge python-telegram-bot
-#   conda install -c conda-forge/label/gcc7 python-telegram-bot
-#   conda install -c conda-forge/label/cf201901 python-telegram-bot
-#
-# TODO Git
-# TODO Restricted access to a admin handler
-# TODO Добавить все сообщения от пользователя в лог файл или print
-# TODO Добавить возможность вводить имя после пустой команды
-# TODO Python autoinstall Dependencies
-# TODO Добавить фильтр Filter.text?
-# TODO Вынести все повторения в переменные глобальные
-# TODO data_list не создается сам
-# TODO уведомление о смене статуса отправится только одному пользователю!!
-# TODO расписание бэкапы
-# TODO проверять по ID а не имени
 
-import requests
+''' 
+> FAQ:
+- Token should be placed in TOKEN_FILE!
+- If lib requests not installed run: pip.main(['install', 'requests'])
+- Pip install telegram-bot:
+  pip install python-telegram-bot --upgrade
+- Anaconda install telegram-bot:
+  conda install -c conda-forge python-telegram-bot
+  conda install -c conda-forge/label/gcc7 python-telegram-bot
+  conda install -c conda-forge/label/cf201901 python-telegram-bot
+
+TODO Git
+TODO Restricted access to a admin handler
+TODO Добавить все сообщения от пользователя в лог файл или print
+TODO Добавить возможность вводить имя после пустой команды
+TODO Python autoinstall Dependencies
+TODO Добавить фильтр Filter.text?
+TODO Вынести все повторения в переменные глобальные
+TODO data_list не создается сам
+TODO уведомление о смене статуса отправится только одному пользователю!!
+TODO расписание бэкапы
+TODO проверять по ID а не имени
+'''
+
+try:
+    import requests
+except ImportError:
+    import pip
+    try:
+        pip.main(["install", "Requests"])
+    except SystemExit:
+        pass
+    import requests
+        
+try:
+    from telegram.ext import Updater
+    from telegram.ext import CommandHandler
+    #from telegram.ext import ConversationHandler
+    #from telegram.ext import MessageHandler
+    #from telegram.ext import Filters
+except ImportError:
+    import pip
+    try:
+        pip.main(["install", "python-telegram-bot"])
+    except SystemExit:
+        pass
+    from telegram.ext import Updater
+    from telegram.ext import CommandHandler
+    #from telegram.ext import ConversationHandler
+    #from telegram.ext import MessageHandler
+    #from telegram.ext import Filters
+        
 from datetime import datetime
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
-from telegram.ext import ConversationHandler
-from telegram.ext import MessageHandler
-from telegram.ext import Filters
 
 DATA_FILE = 'data_list.txt'
 USERS_FILE = 'users_list.txt'
