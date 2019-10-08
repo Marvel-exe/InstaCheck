@@ -3,7 +3,13 @@
 #
 # > FAQ:
 # - Token should be placed in TOKEN_FILE!
-# - pip.main(['install', 'requests']), if lib requests not installed
+# - If lib requests not installed run: pip.main(['install', 'requests'])
+# - Pip install telegram-bot:
+#   pip install python-telegram-bot --upgrade
+# - Anaconda install telegram-bot:
+#   conda install -c conda-forge python-telegram-bot
+#   conda install -c conda-forge/label/gcc7 python-telegram-bot
+#   conda install -c conda-forge/label/cf201901 python-telegram-bot
 #
 # TODO Git
 # TODO Restricted access to a admin handler
