@@ -168,14 +168,14 @@ def users_stat_checker (bot, job):
             req = requests.get("https://instagram.com/" + inst_name)
             
             # find string in HTML page
-            if '"is_private":true' in str(req.content):
+            if '"is_private":true,"is' in str(req.content):
                 inst_status = "private"
                 #logger ('LOG', "  User status is private: " + inst_name)
-            elif '"is_private":false' in str(req.content):
+            elif '"is_private":false,"is' in str(req.content):
                 inst_status = "public"
                 #logger ('LOG', "  User status is public: " + inst_name)
             else:
-                logger ('ERROR', "  Failed status check for user " + inst_name)
+                logger ('ERROR', "  Failed status check for user " + inst_name + " HTTP:" + str(req.status_code))
                 continue
             
             with open(DATA_FILE, 'r') as data_list:
