@@ -1,29 +1,20 @@
 # -*- coding: utf-8 -*-
 # Made by @nesterovoa
-
-''' 
-> FAQ:
-- Token should be placed in TOKEN_FILE!
-- If lib requests not installed run: pip.main(['install', 'requests'])
-- Pip install telegram-bot:
-  pip install python-telegram-bot --upgrade
-- Anaconda install telegram-bot:
-  conda install -c conda-forge python-telegram-bot
-  conda install -c conda-forge/label/gcc7 python-telegram-bot
-  conda install -c conda-forge/label/cf201901 python-telegram-bot
-
-TODO Git
-TODO Restricted access to a admin handler
-TODO Добавить все сообщения от пользователя в лог файл или print
-TODO Добавить возможность вводить имя после пустой команды
-TODO Python autoinstall Dependencies
-TODO Добавить фильтр Filter.text?
-TODO Вынести все повторения в переменные глобальные
-TODO data_list не создается сам
-TODO уведомление о смене статуса отправится только одному пользователю!!
-TODO расписание бэкапы
-TODO проверять по ID а не имени
-'''
+#
+#> FAQ:
+#- Token should be placed in TOKEN_FILE!
+#
+#TODO Git
+#TODO Restricted access to a admin handler
+#TODO Добавить все сообщения от пользователя в лог файл или print
+#TODO Добавить возможность вводить имя после пустой команды
+#TODO Python autoinstall Dependencies
+#TODO Добавить фильтр Filter.text?
+#TODO Вынести все повторения в переменные глобальные
+#TODO data_list не создается сам
+#TODO уведомление о смене статуса отправится только одному пользователю!!
+#TODO расписание бэкапы
+#TODO проверять по ID а не имени
 
 try:
     import requests
@@ -59,6 +50,16 @@ DATA_FILE = 'data_list.txt'
 USERS_FILE = 'users_list.txt'
 LOG_FILE = 'log_list.txt'
 TOKEN_FILE = 'token.txt'
+
+# File creation part
+shitfile = open('data_list',"a+")
+shitfile.close()
+shitfile = open('users_list.txt',"a+")
+shitfile.close()
+shitfile = open('log_list.txt',"a+")
+shitfile.close()
+shitfile = open('token.txt',"a+")
+shitfile.close()
 
 # Read token from file
 with open(TOKEN_FILE, 'r') as token_data: 
@@ -184,7 +185,7 @@ def users_stat_checker (bot, job):
                 if not (inst_name + " is " in data_list_copy):
                     logger ('LOG', "    Adding new user to data_list: " + inst_name + " is " + inst_status)
                     data_list = open("data_list.txt","a")
-                    data_list.write(inst_name + " is " + inst_status)
+                    data_list.write(inst_name + " is " + inst_status + "\n")
                     data_list.close()                    
                 else:                    
                     # it's not new, check for status change
@@ -200,7 +201,7 @@ def users_stat_checker (bot, job):
                                         data_list.write(data_line)    
                             # add changed account name-status in the end                                                
                             data_list = open("data_list.txt","a")
-                            data_list.write(inst_name + " is " + inst_status)
+                            data_list.write(inst_name + " is " + inst_status + "\n")
                             data_list.close()
                             bot.send_message(chat_id = chat_number, text = inst_name + " changed status to private!")  
                             
@@ -216,7 +217,7 @@ def users_stat_checker (bot, job):
                                         data_list.write(data_line) 
                             # add changed account name-status in the end                                                     
                             data_list = open("data_list.txt","a")
-                            data_list.write(inst_name + " is " + inst_status)
+                            data_list.write(inst_name + " is " + inst_status + "\n")
                             data_list.close()
                             bot.send_message(chat_id = chat_number, text = inst_name + " changed status to public!")                                                                
 
