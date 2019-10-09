@@ -52,7 +52,7 @@ LOG_FILE = 'log_list.txt'
 TOKEN_FILE = 'token.txt'
 
 # File creation part
-shitfile = open('data_list',"a+")
+shitfile = open('data_list.txt',"a+")
 shitfile.close()
 shitfile = open('users_list.txt',"a+")
 shitfile.close()
