@@ -176,6 +176,7 @@ def users_stat_checker (bot, job):
                 #logger ('LOG', "  User status is public: " + inst_name)
             else:
                 logger ('ERROR', "  Failed status check for user " + inst_name)
+                continue
             
             with open(DATA_FILE, 'r') as data_list:
                 # make a copy of data_list in memory for faster work
