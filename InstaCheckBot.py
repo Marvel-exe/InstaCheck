@@ -2,18 +2,14 @@
 # Made by @nesterovoa
 #
 #> FAQ:
-#- Token should be placed in TOKEN_FILE!
+#   Token should be placed in TOKEN_FILE!
 #
-#TODO Git
 #TODO Restricted access to a admin handler
-#TODO Добавить все сообщения от пользователя в лог файл или print
+#TODO Добавить все сообщения от пользователя в лог
 #TODO Добавить возможность вводить имя после пустой команды
-#TODO Python autoinstall Dependencies
+#TODO Python autoinstall Dependencies - диалоговые окна
 #TODO Добавить фильтр Filter.text?
-#TODO Вынести все повторения в переменные глобальные
-#TODO data_list не создается сам
 #TODO уведомление о смене статуса отправится только одному пользователю!!
-#TODO расписание бэкапы
 #TODO проверять по ID а не имени
 
 try:
@@ -46,6 +42,7 @@ except ImportError:
         
 from datetime import datetime
 
+# Global variables
 DATA_FILE = 'data_list.txt'
 USERS_FILE = 'users_list.txt'
 LOG_FILE = 'log_list.txt'
@@ -94,7 +91,7 @@ def do_add (bot, update, args):
         with open(USERS_FILE) as users_list:  
             if inst_name + " tracked by " + str(update.message.chat_id) in users_list.read():
                 logger ('LOG', "  User exists in USERS_FILE: " + inst_name + ". ChatID: " + str(update.message.chat_id))
-                update.message.reply_text("User " + inst_name + " is already added to your tracking list")
+                update.message.reply_text("User @" + inst_name + " is already added to your tracking list")
                 users_list.close()
                 return 
             
@@ -106,9 +103,9 @@ def do_add (bot, update, args):
             users_list = open(USERS_FILE,"a")
             users_list.write(inst_name + " tracked by " + str(update.message.chat_id))
             users_list.close()
-            update.message.reply_text("User " + inst_name + " added to your tracking list")              
+            update.message.reply_text("User @" + inst_name + " added to your tracking list")              
         elif checkresult == 0:                      
-            update.message.reply_text("User " + inst_name + " not found")              
+            update.message.reply_text("User @" + inst_name + " not found")              
         else:                                       
             update.message.reply_text("Error, try later")             
 
@@ -125,7 +122,7 @@ def do_remove (bot, update, args):
             if not (inst_name + " tracked by " + str(update.message.chat_id) in users_list.read()):
                 logger ('LOG', "  User not exists in users_list: " + inst_name + ". ChatID: " + str(update.message.chat_id))
                 users_list.close()
-                update.message.reply_text("User " + inst_name + " not tracked")
+                update.message.reply_text("User @" + inst_name + " not tracked")
             else:                
                 # not exists, deleting
                 logger ('LOG', "  Removing from USERS_FILE: " + inst_name + ". ChatID: " + str(update.message.chat_id))
@@ -136,7 +133,7 @@ def do_remove (bot, update, args):
                         if line.strip('\n') != inst_name + " tracked by " + str(update.message.chat_id):
                             users_list.write(line)                            
                 users_list.close()
-                update.message.reply_text("User " + inst_name + " removed from tracking list")
+                update.message.reply_text("User @" + inst_name + " removed from tracking list")
 
 # Check for valid account name            
 def do_checkname (name):
@@ -150,7 +147,7 @@ def do_checkname (name):
         logger ('LOG', "    User found: " + name)
         return 1
     else:
-        logger ('ERROR', "    Is https://www.instagram.com/ available? ")
+        logger ('ERR', "    Is https://www.instagram.com/ available? ")
         return 2
 
 # Check instagram accounts status    
@@ -175,7 +172,7 @@ def users_stat_checker (bot, job):
                 inst_status = "public"
                 #logger ('LOG', "  User status is public: " + inst_name)
             else:
-                logger ('ERROR', "  Failed status check for user " + inst_name + " HTTP:" + str(req.status_code))
+                logger ('ERR', "  Failed status check for user " + inst_name + " HTTP:" + str(req.status_code))
                 continue
             
             with open(DATA_FILE, 'r') as data_list:
@@ -184,7 +181,7 @@ def users_stat_checker (bot, job):
                 
                 # is that a new account name?
                 if not (inst_name + " is " in data_list_copy):
-                    logger ('LOG', "    Adding new user to data_list: " + inst_name + " is " + inst_status)
+                    logger ('LOG', "  Adding new user to data_list: " + inst_name + " is " + inst_status)
                     data_list = open("data_list.txt","a")
                     data_list.write(inst_name + " is " + inst_status + "\n")
                     data_list.close()                    
@@ -192,7 +189,7 @@ def users_stat_checker (bot, job):
                     # it's not new, check for status change
                     if inst_status == "private":
                         if (inst_name + " is public" in data_list_copy):
-                            logger ('LOG', "    Changed status of user: " + inst_name + ". Now is " + inst_status)
+                            logger ('LOG', "  Status changed of user: " + inst_name + ". Now is " + inst_status)
                             # removing this string with account name-status in 2 steps
                             with open(DATA_FILE, 'r') as data_list:
                                 data_lines = data_list.readlines()
@@ -204,12 +201,12 @@ def users_stat_checker (bot, job):
                             data_list = open("data_list.txt","a")
                             data_list.write(inst_name + " is " + inst_status + "\n")
                             data_list.close()
-                            bot.send_message(chat_id = chat_number, text = inst_name + " changed status to private!")  
+                            bot.send_message(chat_id = chat_number, text = '\u274c' + ' @' + inst_name + " changed status to private!" + "\nhttps://instagram.com/" + inst_name) 
                             
                     elif inst_status == "public":
                         if (inst_name + " is private" in data_list_copy):
-                            logger ('LOG', "    Changed status of user: " + inst_name + ". Now is " + inst_status)
-                            # removing this string with account name - status in 2 steps
+                            logger ('LOG', "  Status changed of user: " + inst_name + ". Now is " + inst_status)
+                            # removing this string with account name-status in 2 steps
                             with open(DATA_FILE, 'r') as data_list:
                                 data_lines = data_list.readlines()
                             with open(DATA_FILE, 'w') as data_list:
@@ -220,7 +217,7 @@ def users_stat_checker (bot, job):
                             data_list = open("data_list.txt","a")
                             data_list.write(inst_name + " is " + inst_status + "\n")
                             data_list.close()
-                            bot.send_message(chat_id = chat_number, text = inst_name + " changed status to public!")                                                                
+                            bot.send_message(chat_id = chat_number, text = '\u2705' + ' @' + inst_name + " changed status to public!" + "\nhttps://instagram.com/" + inst_name)                                                                
 
 def main():
     # token for API connection
