@@ -4,7 +4,7 @@
 #> FAQ:
 #   Token should be placed in TOKEN_FILE!
 #
-#TODO Restricted access to a admin handler
+#TODO Админиские функции- задать время опроса, сообщение всем, сообщение одному, последний лог вычитать
 #TODO Добавить все сообщения от пользователя в лог
 #TODO Добавить возможность вводить имя после пустой команды
 #TODO Python autoinstall Dependencies - диалоговые окна
@@ -101,7 +101,7 @@ def do_add (bot, update, args):
         if checkresult == 1:                        
             logger ('LOG', "    Writing to file user: " + inst_name + ". ChatID: " + str(update.message.chat_id))
             users_list = open(USERS_FILE,"a")
-            users_list.write(inst_name + " tracked by " + str(update.message.chat_id))
+            users_list.write(inst_name + " tracked by " + str(update.message.chat_id) + "\n")
             users_list.close()
             update.message.reply_text("User @" + inst_name + " added to your tracking list")              
         elif checkresult == 0:                      
